@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+
+{% block world %}
+	<br>
+	- <a href="{% url 'country' %}">Country</a> <br>
+	- <a href="{% url 'province' %}">Province</a> <br>
+	- <a href="{% url 'region' %}">Region</a> <br>
+	<br>
+{% endblock %}
+
+
+{% block mainframe %}
+	Here comes an overview with the latstest x objects that have been edited or made
+	
+{% endblock %}

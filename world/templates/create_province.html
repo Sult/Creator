@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+
+{% block world %}
+	<br>
+	- <a href="{% url 'country' %}">Country</a> <br>
+	- <a href="{% url 'province' %}">Province</a> <br>
+	- <a href="{% url 'region' %}">Region</a> <br>
+	<br>
+{% endblock %}
+
+{% block mainframe %}
+<div>
+	<center>
+		<h2>Create a new province</h2>
+	</center>
+	<form action="" method="post">{% csrf_token %}
+		<table>
+		{% for field in province_form %}
+			<tr>
+				<td>{{field.label}}</td> <td> {{field}} </td> <td> {{field.errors}}</td>
+			</tr> 
+		{% endfor %}	
+			<tr>
+				<td></td>
+				{% if form_url == "create" %}
+				<td style="float: right;"><input type="submit" formaction="{% url 'create_province' %}" value="add province" /></td>
+				{% elif form_url == "edit" %}
+				<td style="float: right;"><input type="submit" formaction="{% url 'edit_province' province_id %}" value="save" /></td>
+				{% endif %}
+			</tr>
+		</table>
+	</form>
+</div>
+{% endblock %}
+

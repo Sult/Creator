@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+
+{% block mainframe %}
+<center>
+	Are you sure you want to delete:
+	<table>
+		<tr>
+			<td>{{ country.name }}</td>
+			<td>{{ country.likes }}</td>
+			<td>{{ country.hates }}</td>
+		</tr>
+	</table>
+	<form action="" method="post">{% csrf_token %}
+	<input type="submit" formaction="{% url 'delete_country' country.id %}" value="DELETE" />
+	<input type="submit" formaction="{% url 'country' %}" value="back" />
+	</form>
+</center>
+{% endblock %}

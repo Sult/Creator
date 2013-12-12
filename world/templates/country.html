@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+
+{% block world %}
+	<br>
+	- <a href="{% url 'country' %}">Country</a> <br>
+	- <a href="{% url 'province' %}">Province</a> <br>
+	- <a href="{% url 'region' %}">Region</a> <br>
+	<br>
+{% endblock %}
+
+
+{% block mainframe %}
+<h2>Countries:</h2>
+<table style="padding: 3px;">
+	<tr style=" text-align: center;">
+		<th>Name:</th>
+		<th>Likes:</th>
+		<th>Hates:</th>
+		<th>Approved:</th>
+	</tr>
+	{% for country in countries %}
+	<tr>
+		<td>{{ country.name }}</td>
+		<td>{{ country.likes }}</td>
+		<td>{{ country.hates }}</td>
+		<td style=" text-align: center;">{{ country.approved }}</td>
+		<td><a href="{% url 'edit_country' country.id %}">edit</a><br></td>
+		<td><a href="{% url 'delete_country' country.id %}">delete</a><br></td>
+	</tr>
+	{% endfor %}
+	<tr>
+		<td><a href="{% url 'create_country' %}">Create Country</a></td>
+	</tr>
+</table>
+{% endblock %}

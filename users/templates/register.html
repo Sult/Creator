@@ -1,0 +1,12 @@
+<html style="height:100%; display:table; width:100%;">
+<head></head>
+<body background="bgrnd.jpg" style="height:100%; display:table-cell; text-align:center; vertical-align: middle;">
+
+<div style="width: 960px;">
+		<h2>Register</h2>
+		<form action="{% url 'register_user' %}" method="post">{% csrf_token %}
+		{{ form.as_p }}
+		<input type="submit" value="Register" />
+		</form>
+</div>
+

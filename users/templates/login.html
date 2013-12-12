@@ -1,0 +1,35 @@
+<html style="height:100%; display:table; width:100%;">
+<head></head>
+<body background="bgrnd.jpg" style="height:100%; display:table-cell; text-align:center; vertical-align: middle;">
+
+<center>
+	<div style="width: 960px;">
+		<div style="vertical-align: middle;">
+			<div>
+				<form action="{% url 'login_user' %}" method="post" class="login">{% csrf_token %}
+					<div>
+						{{ auth_form.non_field_errors }}
+						<input name="username" placeholder="Username:" type="text" name="username" value="" id="username" class="login">
+						{{ auth_form.username.errors }}
+					</div>
+					<div>
+						<input name="password" placeholder="Password:" type="password" name="password" value="" id="password" class="login">
+						{{ auth_form.password.errors }}
+					</div>
+					<div>
+						<center>
+							<a href="{% url 'register_user' %}">
+								register
+							</a>
+							&nbsp;&nbsp;&nbsp;&nbsp;
+							<button type="submit" class="link">
+								login
+							</button>
+						</center>
+					</div>
+				</form>
+			</div>
+		</div>
+	</div>
+</center>
+
