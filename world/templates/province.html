@@ -1,33 +1,53 @@
 {% extends "base.html" %}
 
 {% block world %}
-	<br>
 	- <a href="{% url 'country' %}">Country</a> <br>
 	- <a href="{% url 'province' %}">Province</a> <br>
+<!--
 	- <a href="{% url 'region' %}">Region</a> <br>
+	<br>
+-->
 	<br>
 {% endblock %}
 
 
 {% block mainframe %}
 <h2>Provinces:</h2>
-<table style="padding: 3px;">
-	<tr style=" text-align: center;">
-		<th>Name:</th>
-		<th>Country:</th>
-		<th>Last Edited:</th>
-	</tr>
-{% for province in provinces %}
-	<tr>
-		<td>{{ province.name }}</td>
-		<td>{{ province.country }}</td>
-		<td>{{ province.approved }}</td>
-		<td><a href="{% url 'edit_province' province.id %}">edit</a><br></td>
-		<td><a href="{% url 'delete_province' province.id %}">delete</a><br></td>
-	</tr>
-{% endfor %}
-	<tr>
-		<td><a href="{% url 'create_province' %}">Create Province</a></td>
-	</tr>
-</table>
+<p>
+	<table>
+		{% for message in messages %}
+		{% if forloop.first %}
+			<tr>
+				<th>Province:</th>
+				<th>Warning:</th>
+			</tr>
+		{% endif %}
+		<tr>
+			{% for part in message %}
+			<td>{{ part }}</td>
+			{% endfor %}
+		</tr>
+		{% endfor %}
+	</table>
+</p>
+	<table style="padding: 3px;">
+		<tr style=" text-align: center;">
+			<th>Name:</th>
+			<th>Country:</th>
+			<th>Approved:</th>
+		</tr>
+	{% for province in provinces %}
+		<tr>
+			<td>{{ province.name }}</td>
+			<td>{{ province.country }}</td>
+			<td style=" text-align: center;">{{ province.approved }}</td>
+			<td><a href="{% url 'edit_province' province.id %}">edit</a><br></td>
+			<td><a href="{% url 'delete_province' province.id %}">delete</a><br></td>
+		</tr>
+	{% endfor %}
+		<tr>
+			<td><a href="{% url 'create_province' %}">Create Province</a></td>
+		</tr>
+	</table>
+
 {% endblock %}

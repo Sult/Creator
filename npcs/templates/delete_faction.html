@@ -5,12 +5,12 @@
 	Are you sure you want to delete:
 	<table>
 		<tr>
-			<td>{{ del_country.name }}</td>
+			<td>{{ delete_faction.name }}</td>
 		</tr>
 	</table>
 	<form action="" method="post">{% csrf_token %}
-	<input type="submit" formaction="{% url 'delete_country' delete_country.id %}" value="DELETE" />
+	<input type="submit" formaction="{% url 'delete_faction' delete_faction.id %}" value="DELETE" />
 	</form>
 </center>
-<a href="{% url 'country' %}">Back</a>
+<a href="{% url 'faction' %}">Back</a>
 {% endblock %}

@@ -1,0 +1,58 @@
+{% extends "base.html" %}
+
+{% block npcs %}
+	- <a href="{% url 'faction' %}">Faction</a> <br>
+- <a href="{% url 'npc_guild' %}">NPC Guild</a> <br>
+	<br>
+{% endblock %}
+
+
+{% block mainframe %}
+
+{% if messages|length > 0 %}
+	{% for npc_guild, warnings in messages %}
+<p>
+	<h2>NPC Guild:</h2>
+	<table>
+		<tr>
+			<td>{{ npc_guild }}</td>
+			<td></td>
+		</tr>
+		{% for warning in warnings %}
+		<tr>
+			<td></td>
+			<td>{{ warning }}</td>
+		</tr>
+		{% endfor %}
+	{% endfor %}
+	</table>
+</p>
+{% endif %}
+
+
+
+{% if messages|length > 0 %}
+<p>
+	<table style="padding: 3px;">
+		<tr style=" text-align: center;">
+			<th>Name:</th>
+			<th>Category:</th>
+			<th>Faction:</th>
+			<th>Approved:</th>
+		</tr>
+	{% for npc_guild in npc_guilds %}
+		<tr>
+			<td>{{ npc_guild.name }}</td>
+			<td>{{ npc_guild.category }}</td>
+			<td>{{ npc_guild.faction }}</td>
+			<td style=" text-align: center;">{{ npc_guild.approved }}</td>
+			<td><a href="{% url 'edit_npc_guild' npc_guild.id %}">edit</a><br></td>
+			<td><a href="{% url 'delete_npc_guild' npc_guild.id %}">delete</a><br></td>
+		</tr>
+	{% endfor %}
+	</table>
+</p>
+{% endif %}
+
+<a href="{% url 'create_npc_guild' %}">Create NPC Guild</a>
+{% endblock %}

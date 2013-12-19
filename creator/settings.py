@@ -11,11 +11,11 @@ MANAGERS = ADMINS
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.postgresql_psycopg2', # Add 'postgresql_psycopg2', 'mysql', 'sqlite3' or 'oracle'.
+        'ENGINE': 'django.db.backends.sqlite3', # Add 'postgresql_psycopg2', 'mysql', 'sqlite3' or 'oracle'.
         'NAME': 'db_creator',                      # Or path to database file if using sqlite3.
         # The following settings are not used with sqlite3:
-        'USER': 'ikke',
-        'PASSWORD': 'p1kl2kk3r',
+        'USER': '',
+        'PASSWORD': '',
         'HOST': '',                      # Empty for localhost through domain sockets or '127.0.0.1' for localhost through TCP.
         'PORT': '',                      # Set to empty string for default.
     }
@@ -128,6 +128,7 @@ INSTALLED_APPS = (
     'django.contrib.admindocs',
     'users',
     'world',
+    'npcs',
 )
 
 # A sample logging configuration. The only tangible logging

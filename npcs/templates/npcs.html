@@ -1,0 +1,63 @@
+{% extends "base.html" %}
+
+{% block npcs %}
+- <a href="{% url 'faction' %}">Faction</a> <br>
+- <a href="{% url 'npc_guild' %}">NPC Guild</a> <br>
+<br>
+{% endblock %}
+
+{% block mainframe %}
+
+{% if factions|length > 0 %}
+<p>
+	<h2>Last edited:</h2>
+	<table style="padding: 3px;">
+		<tr>
+			<th>Faction:</th>
+		</tr>
+		<tr style="font-weight:bold;">	
+			<td>Name:</td>
+			<td>Likes:</td>
+			<td>Hates:</td>
+			<td>Approved:</td>
+		</tr>
+	{% for faction in factions %}
+		<tr>
+			<td>{{ faction.name }}</td>
+			<td>{{ faction.likes }}</td>
+			<td>{{ faction.hates }}</td>
+			<td style=" text-align: center;">{{ faction.approved }}</td>
+			<td><a href="{% url 'edit_country' faction.id %}">edit</a><br></td>
+		</tr>
+	{% endfor %}
+	</table>
+</p>
+{% endif %}
+
+
+{% if npc_guilds|length > 0 %}
+<p>
+	<table style="padding: 3px;">
+		<tr>
+			<th>NPC Guild:</th>
+		</tr>
+		<tr style="font-weight:bold;">	
+			<td>Name:</td>
+			<td>Category:</td>
+			<td>Faction:</td>
+			<td>Approved:</td>
+		</tr>
+	{% for npc_guild in npc_guilds %}
+		<tr>
+			<td>{{ npc_guild.name }}</td>
+			<td>{{ npc_guild.category }}</td>
+			<td>{{ npc_guild.faction }}</td>
+			<td style=" text-align: center;">{{ npc_guild.approved }}</td>
+			<td><a href="{% url 'edit_npc_guild' npc_guild.id %}">edit</a><br></td>
+		</tr>
+	{% endfor %}
+	</table>
+</p>
+{% endif %}
+
+{% endblock %}

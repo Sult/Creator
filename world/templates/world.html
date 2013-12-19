@@ -1,15 +1,59 @@
 {% extends "base.html" %}
 
 {% block world %}
-	<br>
 	- <a href="{% url 'country' %}">Country</a> <br>
 	- <a href="{% url 'province' %}">Province</a> <br>
-	- <a href="{% url 'region' %}">Region</a> <br>
+	- <a href="{% url 'region' %}">Region(WN)</a> <br>
 	<br>
 {% endblock %}
 
 
 {% block mainframe %}
-	Here comes an overview with the latstest x objects that have been edited or made
-	
+
+
+{% for country in countries %}
+	{% if forloop.first %}
+	<h2>Last edited:</h2>
+	<table style="padding: 3px;">
+		<tr>
+			<th>Countries:</th>
+		</tr>
+		<tr style="font-weight:bold;">	
+			<td>Name:</td>
+			<td>Approved:</td>
+		</tr>
+	{% endif %}
+		<tr>
+			<td>{{ country.name }}</td>
+			<td style=" text-align: center;">{{ country.approved }}</td>
+			<td><a href="{% url 'edit_country' country.id %}">edit</a><br></td>
+		</tr>
+	{% if forloop.last %}
+	</table>
+	<br><br>
+	{% endif %}
+{% endfor %}
+
+
+{% for province in provinces %}
+	{% if forloop.first %}
+	<table style="padding: 3px;">
+		<tr>
+			<th>Provinces:</th>
+		</tr>
+		<tr style="font-weight:bold;">	
+			<td>Name:</td>
+			<td>Approved:</td>
+		</tr>
+	{% endif %}
+		<tr>
+			<td>{{ province.name }}</td>
+			<td style=" text-align: center;">{{ province.approved }}</td>
+			<td><a href="{% url 'edit_province' province.id %}">edit</a><br></td>
+		</tr>
+	{% if forloop.last %}
+	</table>
+	{% endif %}
+{% endfor %}
+
 {% endblock %}

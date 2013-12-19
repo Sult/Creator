@@ -1,7 +1,7 @@
 from django import forms
 from world.models import Country, Province, Region
 
-from methods import creator_logic
+
 
 class CountryForm(forms.ModelForm):
 	"""Form to create or edit Countries."""
@@ -11,45 +11,29 @@ class CountryForm(forms.ModelForm):
 					widget=forms.Textarea(attrs={'width': 300, 'height': 100}))
 	history = forms.CharField(
 					widget=forms.Textarea(attrs={'width': 300, 'height': 100}))
-	likes_set = Country.objects.all()
-	likes = forms.ModelChoiceField(queryset=likes_set, empty_label="Country it likes", required=False)
-	hates_set = Country.objects.all()
-	hates = forms.ModelChoiceField(queryset=hates_set, empty_label="Country it hates", required=False)
 	
 	
 	class Meta:
 		model = Country
-		exclude = ['approved', 'log', 'edited']
+		fields = ['name', 'flavor', 'history']
+		exclude = ['approved', 'edited']
 		
-	#def __init__(self, *args, **kwargs):
-		#instance = kwargs.pop('instance', None)
-		#super(CountryForm, self).__init__(*args, **kwargs)
-		#if 'instance' in kwargs:
-			#self.fields['likes'].queryset = Country.objects.exclude(kwargs['instance'])
-			#self.fields['hates'].queryset = Country.objects.exclude(kwargs['instance'])
-	
 	def clean_name(self):
-		raw_data = self.cleaned_data['name']
-		data = raw_data.title()
-		
-		#if not (form.instance and form.instance.pk):
-		if Country.objects.filter(name=data).exists():
-			raise forms.ValidationError(("There is already a country with the name: %s") % data)
-		if Province.objects.filter(name=data).exists():
-			raise forms.ValidationError(("There is already a province with the name: %s") % data)
-		if Region.objects.filter(name=data).exists():
-			raise forms.ValidationError(("There is already a region with the name: %s") % data) 
-		return data
+		name = self.cleaned_data['name'].title()
+		qs = Country.objects.filter(name=name)
 	
-	def clean(self):
-		cleaned_data = super(CountryForm, self).clean()
-		likes = cleaned_data.get("likes")
-		hates = cleaned_data.get("hates")
+		if self.instance.pk is not None:
+			qs = qs.exclude(pk=self.instance.pk)
+		if qs.exists():
+			raise forms.ValidationError("There is already a country with name: %s" % name)	
 		
-		if likes == hates:
-			raise forms.ValidationError("Your friend cannot be your enemy aswell")
-		
-		return cleaned_data
+		if Province.objects.filter(name=name).exists():
+			raise forms.ValidationError(("There is already a province with the name: %s") % data)
+		if Region.objects.filter(name=name).exists():
+			raise forms.ValidationError(("There is already a region with the name: %s") % data) 
+	
+		return name
+
 		
 		
 		
@@ -68,20 +52,23 @@ class ProvinceForm(forms.ModelForm):
 	class Meta:
 		model = Province
 		fields = ['name', 'country', 'flavor', 'history']
-		exclude = ['approved', 'log', 'edited']
+		exclude = ['approved', 'edited']
 	
 	def clean_name(self):
-		raw_data = self.cleaned_data['name']
-		data = raw_data.title()
-		
-		#if not (form.instance and form.instance.pk):
-		if Country.objects.filter(name=data).exists():
+		name = self.cleaned_data['name'].title()
+		qs = Province.objects.filter(name=name)
+	
+		if self.instance.pk is not None:
+			qs = qs.exclude(pk=self.instance.pk)
+		if qs.exists():
+			raise forms.ValidationError("There is already a province with name: %s" % name)	
+			
+		if Country.objects.filter(name=name).exists():
 			raise forms.ValidationError(("There is already a country with the name: %s") % data)
-		if Province.objects.filter(name=data).exists():
-			raise forms.ValidationError(("There is already a province with the name: %s") % data)
-		if Region.objects.filter(name=data).exists():
+		if Region.objects.filter(name=name).exists():
 			raise forms.ValidationError(("There is already a region with the name: %s") % data) 
-		return data
+	
+		return name
 	
 
 class RegionForm(forms.ModelForm):
@@ -89,19 +76,22 @@ class RegionForm(forms.ModelForm):
 	
 	class Meta:
 		model = Region
-		exclude = ['approved', 'log', 'edited']
+		exclude = ['approved', 'edited']
 	
 	def clean_name(self):
-		raw_data = self.cleaned_data['name']
-		data = raw_data.title()
+		name = self.cleaned_data['name'].title()
+		qs = Region.objects.filter(name=name)
+	
+		if self.instance.pk is not None:
+			qs = qs.exclude(pk=self.instance.pk)
+		if qs.exists():
+			raise forms.ValidationError("There is already a region with name: %s" % name)	
 		
-		#if not (form.instance and form.instance.pk):
-		if Country.objects.filter(name=data).exists():
-			raise forms.ValidationError(("There is already a country with the name: %s") % data)
-		if Province.objects.filter(name=data).exists():
+		if Province.objects.filter(name=name).exists():
 			raise forms.ValidationError(("There is already a province with the name: %s") % data)
-		if Region.objects.filter(name=data).exists():
-			raise forms.ValidationError(("There is already a region with the name: %s") % data) 
-		return data
+		if Country.objects.filter(name=name).exists():
+			raise forms.ValidationError(("There is already a country with the name: %s") % data) 
+	
+		return name
 		
 		

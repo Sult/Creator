@@ -16,9 +16,10 @@
 		CREATOR
 		<br><br>
 		
-		<a href="{% url 'world' %}">World</a>
+		<a href="{% url 'world' %}">World</a><br>
 		{%block world %} {% endblock %}
-		
+		<a href="{% url 'npc' %}">NPCs</a><br>
+		{%block npcs %} {% endblock %}
 		<br><br><br>
 		<center>
 			<a href="{% url 'logout' %}">Logout</a>

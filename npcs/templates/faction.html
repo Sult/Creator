@@ -1,0 +1,59 @@
+{% extends "base.html" %}
+
+{% block npcs %}
+	- <a href="{% url 'faction' %}">Faction</a> <br>
+- <a href="{% url 'npc_guild' %}">NPC Guild</a> <br>
+	<br>
+{% endblock %}
+
+
+{% block mainframe %}
+
+{% for faction, warnings in messages %}
+	{% if forloop.first %}
+	<h2>Faction:</h2>
+	<p>
+		<table>
+	{% endif %}
+			<tr>
+				<td>{{ faction }}</td>
+			</tr>
+	{% for warning in warnings %}
+			<tr>
+				<td></td>
+				<td>{{ warning }}</td>
+			</tr>
+	{% endfor %}
+	{% if forloop.last %}
+		</table>
+	</p>
+	{% endif %}
+{% endfor %}
+
+
+{% for faction in factions %}	
+	{% if forloop.first %}
+	<p>
+		<table style="padding: 3px;">
+			<tr style=" text-align: center;">
+				<th>Name:</th>
+				<th>Likes:</th>
+				<th>Hates:</th>
+				<th>Approved:</th>
+			</tr>
+	{% endif %}
+			<tr>
+				<td>{{ faction.name }}</td>
+				<td>{{ faction.likes }}</td>
+				<td>{{ faction.hates }}</td>
+				<td style=" text-align: center;">{{ faction.approved }}</td>
+				<td><a href="{% url 'edit_faction' faction.id %}">edit</a><br></td>
+				<td><a href="{% url 'delete_faction' faction.id %}">delete</a><br></td>
+			</tr>
+	{% if forloop.last %}
+		</table>
+	</p>
+	{% endif %}
+{% endfor %}
+<a href="{% url 'create_faction' %}">Create Faction</a>
+{% endblock %}

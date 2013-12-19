@@ -18,11 +18,12 @@ def world(request):
 	if not request.user.is_authenticated():
 		return HttpResponseRedirect(reverse('login_user'))
 	
-	# show 3 last new/changed countries
-	# show 3 last new/changed provinces
-	# show 3 last new/changed regions
+	#list last edited objects
+	countries = Country.objects.order_by('-edited')[:3]
+	provinces = Province.objects.order_by('-edited')[:5]
+		
 	
-	return render(request, 'world.html')
+	return render(request, 'world.html', {'countries': countries, 'provinces': provinces })
 
 
 def country(request):
@@ -49,8 +50,8 @@ def create_country(request):
 		if country_form.is_valid():
 			new_country = country_form.save(commit=False)
 			new_country.edited = datetime.datetime.utcnow().replace(tzinfo=utc)
-			new_country.log = ModelLog.create_log(request.user, new_country, new_country)
 			new_country.save()
+			ModelLog.create_log(request.user, new_country)
 			
 			return HttpResponseRedirect(reverse('country'))
 			
@@ -73,11 +74,11 @@ def edit_country(request, country_id):
 	
 	country_form = CountryForm(request.POST or None, instance=country)
 	if country_form.is_valid():
-		the_country = country_form.save(commit=False)
-		the_country.edited = datetime.datetime.utcnow().replace(tzinfo=utc)
-		the_country.log = ModelLog.create_log(request.user, country, the_country)
-		the_country.save()
-			
+		edit_country = country_form.save(commit=False)
+		edit_country.edited = datetime.datetime.utcnow().replace(tzinfo=utc)
+		edit_country.save()
+		ModelLog.create_log(request.user, edit_country)
+		
 		return HttpResponseRedirect(reverse('country'))
 			
 	return render(request, 'create_country.html', {'country_form': country_form, 'form_url': form_url, 'country_id': country.id})
@@ -85,19 +86,19 @@ def edit_country(request, country_id):
 	
 def delete_country(request, country_id):
 	## check if user is logged in
-	#if not request.user.is_authenticated():
-		#return HttpResponseRedirect(reverse('login_user'))
+	if not request.user.is_authenticated():
+		return HttpResponseRedirect(reverse('login_user'))
 	
-	#del_country = get_object_or_404(Country, pk=country_id)
+	delete_country = get_object_or_404(Country, pk=country_id)
 	
-	#if request.POST:
-		#print del_country
-		#del_country.delete()
-		#return HttpResponseRedirect(reverse('country'))
+	if request.POST:
+		ModelLog.create_log(request.user, delete_country)
+		delete_country.delete()
+		return HttpResponseRedirect(reverse('country'))
 	
-	#return render(request, 'delete_country.html',{'del_country': del_country})
-	pass
+	return render(request, 'delete_country.html',{'delete_country': delete_country})
 
+# provinces overview
 def province(request):
 	# Check if user is logged in
 	if not request.user.is_authenticated():
@@ -106,8 +107,13 @@ def province(request):
 	# List all countries in table with basic information
 	provinces = Province.objects.order_by('name')
 	
-	return render(request, 'province.html', {'provinces': provinces})
+	messages = []
+	for province in provinces:
+		messages.append(Province.need_attention(province))
+	
+	return render(request, 'province.html', {'provinces': provinces, 'messages': messages})
 
+# Create a new province
 def create_province(request):
 	# check if user is logged in
 	if not request.user.is_authenticated():
@@ -120,8 +126,9 @@ def create_province(request):
 		if province_form.is_valid():
 			new_province = province_form.save(commit=False)
 			new_province.edited = datetime.datetime.utcnow().replace(tzinfo=utc)
-			new_province.log = ModelLog.create_log(request.user, new_province, new_province)
-			province_form.save()
+			new_province.save()
+			ModelLog.create_log(request.user, new_province)
+			
 			return HttpResponseRedirect(reverse('province'))
 			
 		else:
@@ -132,7 +139,7 @@ def create_province(request):
 	return render(request, 'create_province.html', {'province_form': province_form, 'form_url': form_url})
 
 
-
+# Edit a province
 def edit_province(request, province_id):
 	# check if user is logged in
 	if not request.user.is_authenticated():
@@ -143,20 +150,33 @@ def edit_province(request, province_id):
 	
 	province_form = ProvinceForm(request.POST or None, instance=province)
 	if province_form.is_valid():
-		province = country_form.save(commit=False)
-		province.edited = datetime.datetime.utcnow().replace(tzinfo=utc)
-		province.log = ModelLog.create_log(request.user, country, new_country)
-		province.save()
-			
+		edit_province = province_form.save(commit=False)
+		edit_province.edited = datetime.datetime.utcnow().replace(tzinfo=utc)
+		edit_province.save()
+		ModelLog.create_log(request.user, edit_province)
+
 		return HttpResponseRedirect(reverse('province'))
 			
 	return render(request, 'create_province.html', {'province_form': province_form, 'form_url': form_url, 'province_id': province.id})
 
 
+#delete a province
 def delete_province(request, province_id):
-	pass
+	## check if user is logged in
+	if not request.user.is_authenticated():
+		return HttpResponseRedirect(reverse('login_user'))
+	
+	delete_province = get_object_or_404(Province, pk=province_id)
+	
+	if request.POST:
+		ModelLog.create_log(request.user, delete_province)
+		delete_province.delete()
+		return HttpResponseRedirect(reverse('province'))
+	
+	return render(request, 'delete_province.html',{'delete_province': delete_province})
 
 
+#region overview
 def region(request):
 	# check if user is logged in
 	if not request.user.is_authenticated():
